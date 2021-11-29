@@ -1,4 +1,10 @@
-import java.util.Scanner;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Launcher {
     public static int fibo(int n) {
@@ -21,6 +27,7 @@ public class Launcher {
             final String str = scanner.nextLine();
             if (str.equalsIgnoreCase("quit")) {
                 running = false;
+
             } else if (str.equalsIgnoreCase("fibo")) {
                 System.out.print(" Entrez un nombre: ");
                 final int n = scanner.nextInt();
@@ -29,6 +36,39 @@ public class Launcher {
 
                 final int result = fibo(n);
                 System.out.println(" " + result);
+
+            } else if (str.equalsIgnoreCase("freq")) {
+                System.out.print(" Entrez un chemin de fichier: ");
+                final String path = scanner.nextLine();
+                final Path pathObject = Paths.get(path);
+                try {
+                    final String content = Files.readString(pathObject, StandardCharsets.UTF_8)
+                            .replaceAll("[^a-zA-Z]", " ")
+                            .toLowerCase(Locale.ROOT);
+                    final Map<String, Long> counted = Arrays.stream(
+                            content.split("\\s+")
+                    ).collect(
+                            Collectors.groupingBy(
+                                    Function.identity(),
+                                    Collectors.counting()
+                            )
+                    );
+                    final List<Map.Entry<String, Long>> list = new ArrayList<>(
+                            counted.entrySet()
+                    );
+                    list.sort(
+                            Comparator.comparingLong(
+                                    Map.Entry::getValue
+                            )
+                    );
+                    for (final Map.Entry<String, Long> entry : list) {
+                        System.out.println(" - \"" + entry.getKey() + "\": " + entry.getValue());
+                    }
+
+                } catch (final Exception e) {
+                    System.err.println(" Unreadable file: " + e.getClass().getName() + " " + e.getMessage());
+                }
+
             } else {
                 System.out.println(" Unknown command");
             }
