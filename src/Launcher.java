@@ -61,7 +61,8 @@ public class Launcher {
                                     Map.Entry::getValue
                             )
                     );
-                    for (final Map.Entry<String, Long> entry : list) {
+                    for (int a = Math.max(list.size() - 3, 0); a < list.size(); a++) {
+                        final Map.Entry<String, Long> entry = list.get(a);
                         System.out.println(" - \"" + entry.getKey() + "\": " + entry.getValue());
                     }
 
