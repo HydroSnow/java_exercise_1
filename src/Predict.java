@@ -49,6 +49,13 @@ public class Predict implements Command {
 
             // predicting
             for (int a = 0; a < 20; a++) {
+                // if map has no record for word
+                if (!map0.containsKey(word0)) {
+                    System.out.println();
+                    System.out.print(" No result for word \"" + word0 + "\".");
+                    break;
+                }
+
                 // getting results for word
                 final Map<String, Long> map1 = map0.get(word0);
                 final List<Map.Entry<String, Long>> entries = new ArrayList<>(map1.entrySet());
