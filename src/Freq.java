@@ -3,8 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Freq implements Command {
     @Override
@@ -18,27 +16,31 @@ public class Freq implements Command {
         final String path = scanner.nextLine();
         final Path pathObject = Paths.get(path);
         try {
+            // reading file, lower case, and only alphabetic
             final String content = Files.readString(pathObject, StandardCharsets.UTF_8)
-                    .replaceAll("[^a-zA-Z]", " ")
-                    .toLowerCase(Locale.ROOT);
-            final Map<String, Long> counted = Arrays.stream(
-                    content.split("\\s+")
-            ).collect(
-                    Collectors.groupingBy(
-                            Function.identity(),
-                            Collectors.counting()
-                    )
-            );
-            final List<Map.Entry<String, Long>> list = new ArrayList<>(
-                    counted.entrySet()
-            );
-            list.sort(
-                    Comparator.comparingLong(
-                            Map.Entry::getValue
-                    )
-            );
-            for (int a = Math.max(list.size() - 3, 0); a < list.size(); a++) {
-                final Map.Entry<String, Long> entry = list.get(a);
+                    .toLowerCase(Locale.ROOT)
+                    .replaceAll("[^a-z]", " ");
+
+            // splitting words by whitespace
+            final String[] words = content.split("\\s+");
+
+            // putting words in map
+            final Map<String, Long> map = new HashMap<>();
+            for (final String word : words) {
+                if (map.containsKey(word)) {
+                    map.put(word, map.get(word) + 1L);
+                } else {
+                    map.put(word, 1L);
+                }
+            }
+
+            // getting results
+            final List<Map.Entry<String, Long>> entries = new ArrayList<>(map.entrySet());
+            entries.sort(Comparator.comparingLong(Map.Entry::getValue));
+
+            // printing results
+            for (int a = Math.max(entries.size() - 3, 0); a < entries.size(); a++) {
+                final Map.Entry<String, Long> entry = entries.get(a);
                 System.out.println(" - \"" + entry.getKey() + "\": " + entry.getValue());
             }
 
