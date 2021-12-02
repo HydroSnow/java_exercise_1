@@ -45,14 +45,12 @@ public class Predict implements Command {
             String word0 = scanner.nextLine()
                     .toLowerCase(Locale.ROOT)
                     .replaceAll("[^a-z]", "");
-            System.out.print(" Phrase: " + word0);
 
             // predicting
             for (int a = 0; a < 20; a++) {
                 // if map has no record for word
                 if (!map0.containsKey(word0)) {
                     System.out.println();
-                    System.out.print(" No result for word \"" + word0 + "\".");
                     break;
                 }
 

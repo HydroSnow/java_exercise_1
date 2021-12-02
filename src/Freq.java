@@ -41,7 +41,7 @@ public class Freq implements Command {
             // printing results
             for (int a = Math.max(entries.size() - 3, 0); a < entries.size(); a++) {
                 final Map.Entry<String, Long> entry = entries.get(a);
-                System.out.println(" - \"" + entry.getKey() + "\": " + entry.getValue());
+                System.out.println(entry.getKey() + " ");
             }
 
         } catch (final Exception e) {
